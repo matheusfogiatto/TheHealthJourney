@@ -1,37 +1,39 @@
 import AVFoundation
 import SpriteKit
 
-public class Intro1: SKScene {
+public class BreathingDescription: SKScene {
     
-    private var brainHappy: SKSpriteNode?
+    private var exerciseBrain: SKSpriteNode?
     private var continueButton: SKSpriteNode?
     private var background: SKSpriteNode?
     
     override public func didMove(to view: SKView) {
         
+        buildBrainHappy()
+        buildBackground()
+        buildTapContinue()
+        
         let label = self.childNode(withName: "textLabel") as? SKLabelNode
         label!.text =
         """
-        My name is Twelves and I will be your guide in this journey!
-        Hope you enjoy and learn something with me!
+        Your breath is a powerful tool to ease stress and make you feel less anxious. Controlled breathing exercises can help keep your mind and body in shape, by helping to lower blood pressure, promote feelings of calm and relaxation. Some simple breathing exercises can make a big difference if you make them part of your regular routine.
         """
         label!.lineBreakMode = NSLineBreakMode.byWordWrapping
         label!.numberOfLines = 0
         label!.preferredMaxLayoutWidth = 450
         
-        buildBrainHappy()
-        buildTapContinue()
-        buildBackground()
+        
+       
     }
     
     func buildBrainHappy(){
-        let texture = SKTexture(imageNamed: "Intro/brainHappy")
-        brainHappy = SKSpriteNode(texture: texture)
-        brainHappy?.size = CGSize(width: 516, height: 487)
-        brainHappy?.position = CGPoint(x: -258.708, y: -30.75)
-        brainHappy?.zPosition = 0
-        brainHappy?.name = "HAPPYBRAIN"
-        addChild(brainHappy!)
+        let texture = SKTexture(imageNamed: "BreathingGame/brainRunning")
+        exerciseBrain = SKSpriteNode(texture: texture)
+        exerciseBrain?.size = CGSize(width: 516, height: 487)
+        exerciseBrain?.position = CGPoint(x: -258.708, y: -30.75)
+        exerciseBrain?.zPosition = 0
+        exerciseBrain?.name = "HAPPYBRAIN"
+        addChild(exerciseBrain!)
     }
     
     func buildBackground(){
@@ -58,9 +60,9 @@ public class Intro1: SKScene {
     override public func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         
         if let _ = touches.first {
-            let scene = Intro2(fileNamed: "Intro/Intro2")!
+            let scene = ToDoListGame(fileNamed: "ToDoListGame/ToDoListGame")!
             scene.scaleMode = .aspectFit
-            let transition = SKTransition.push(with: .up, duration: 1)
+            let transition = SKTransition.push(with: .left, duration: 1)
             self.view?.presentScene(scene, transition: transition)
         }
     }

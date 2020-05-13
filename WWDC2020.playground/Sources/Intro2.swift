@@ -4,10 +4,14 @@ import SpriteKit
 public class Intro2: SKScene {
     
     private var brainHappy: SKSpriteNode?
+    private var background: SKSpriteNode?
+    private var continueButton: SKSpriteNode?
     
     override public func didMove(to view: SKView) {
         
         buildBrainHappy()
+        buildBackground()
+        buildTapContinue()
         
         let label = self.childNode(withName: "textLabel") as? SKLabelNode
         label!.text =
@@ -16,18 +20,38 @@ public class Intro2: SKScene {
         """
         label!.lineBreakMode = NSLineBreakMode.byWordWrapping
         label!.numberOfLines = 0
-        label!.preferredMaxLayoutWidth = 580
+        label!.preferredMaxLayoutWidth = 450
        
     }
     
     func buildBrainHappy(){
-        let texture = SKTexture(imageNamed: "Intro/brainThinkingBig")
+        let texture = SKTexture(imageNamed: "Intro/brainThinking")
         brainHappy = SKSpriteNode(texture: texture)
-        brainHappy?.size = CGSize(width: 258, height: 307)
-        brainHappy?.position = CGPoint(x: -351, y: -217.85)
+        brainHappy?.size = CGSize(width: 516, height: 487)
+        brainHappy?.position = CGPoint(x: -258.708, y: -30.75)
         brainHappy?.zPosition = 0
         brainHappy?.name = "HAPPYBRAIN"
         addChild(brainHappy!)
+    }
+    
+    func buildBackground(){
+        let texture = SKTexture(imageNamed: "Intro/imagemBackground")
+        background = SKSpriteNode(texture: texture)
+        background?.size = CGSize(width: 1200, height: 900)
+        background?.position = CGPoint(x: 0, y: 0)
+        background?.zPosition = -10
+        background?.name = "BACKGROUND"
+        addChild(background!)
+    }
+    
+    func buildTapContinue(){
+        let texture = SKTexture(imageNamed: "Intro/continueButton")
+        continueButton = SKSpriteNode(texture: texture)
+        continueButton?.size = CGSize(width: 336, height: 90)
+        continueButton?.position = CGPoint(x: 333, y: -320)
+        continueButton?.zPosition = 0
+        continueButton?.name = "CONTINUEBUTTON"
+        addChild(continueButton!)
     }
     
     

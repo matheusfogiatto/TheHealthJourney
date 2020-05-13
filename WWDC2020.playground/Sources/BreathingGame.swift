@@ -15,11 +15,39 @@ public class BreathingGame: SKScene {
     private var star9: SKSpriteNode?
     private var star10: SKSpriteNode?
     private var star11: SKSpriteNode?
+    private var continueButton: SKSpriteNode?
+    private var background: SKSpriteNode?
     
     private let starNormalWidth = 200.0
     private let timeInterval = 3.5
+    private var countLabel = 0
     
     override public func didMove(to view: SKView) {
+        
+        let label = self.childNode(withName: "textLabel") as? SKLabelNode
+        label!.lineBreakMode = NSLineBreakMode.byWordWrapping
+        label!.numberOfLines = 0
+        label!.text = "Inhale"
+        label!.preferredMaxLayoutWidth = 130
+        
+        let label2 = self.childNode(withName: "textLabel2") as? SKLabelNode
+        label2!.lineBreakMode = NSLineBreakMode.byWordWrapping
+        label2!.numberOfLines = 0
+        label2!.text = "..."
+        label2!.preferredMaxLayoutWidth = 130
+        
+        let label3 = self.childNode(withName: "textLabel3") as? SKLabelNode
+        label3!.text = "Exhale"
+        label3!.lineBreakMode = NSLineBreakMode.byWordWrapping
+        label3!.numberOfLines = 0
+        label3!.alpha = 0
+        label3!.preferredMaxLayoutWidth = 130
+        
+        let label4 = self.childNode(withName: "textLabel4") as? SKLabelNode
+        label4!.text = "..."
+        label4!.lineBreakMode = NSLineBreakMode.byWordWrapping
+        label4!.numberOfLines = 0
+        label4!.preferredMaxLayoutWidth = 130
         
         buildStar()
         buildStar2()
@@ -32,6 +60,8 @@ public class BreathingGame: SKScene {
         buildStar9()
         buildStar10()
         buildStar11()
+        buildBackground()
+        buildTapContinue()
         
         resizeAndRotate(widthQuantity: 0.3, angleQuantity: 0.03, duration: timeInterval, node: star2)
         resizeAndRotate(widthQuantity: 0.5, angleQuantity: 0.07, duration: timeInterval, node: star3)
@@ -43,6 +73,11 @@ public class BreathingGame: SKScene {
         resizeAndRotate(widthQuantity: 1.7, angleQuantity: 0.31, duration: timeInterval, node: star9)
         resizeAndRotate(widthQuantity: 1.9, angleQuantity: 0.35, duration: timeInterval, node: star10)
         resizeAndRotate(widthQuantity: 2.1, angleQuantity: 0.39, duration: timeInterval, node: star11)
+        
+        changeTextLabels(duration: timeInterval, node: label)
+        changeTextLabels(duration: timeInterval, node: label2)
+        changeTextLabels2(duration: timeInterval, node: label3)
+        changeTextLabels2(duration: timeInterval, node: label4)
     }
     
     override public func update(_ currentTime: TimeInterval) {
@@ -62,6 +97,30 @@ public class BreathingGame: SKScene {
         
         let arrayAnimations = [firstAnimation,secondAnimation, wait]
         
+        node?.run(SKAction.repeatForever(SKAction.sequence(arrayAnimations)))
+    }
+    
+    func changeTextLabels(duration: Double, node: SKLabelNode?){
+        let action = SKAction.fadeAlpha(to: 1, duration: 0.000000001)
+        let wait = SKAction.wait(forDuration: 3.5)
+        let action2 = SKAction.fadeAlpha(to: 0, duration: 0.000000001)
+        let wait2 = SKAction.wait(forDuration: 4.5)
+        
+        
+        let arrayAnimations = [action, wait, action2, wait2]
+        node?.run(SKAction.repeatForever(SKAction.sequence(arrayAnimations)))
+    }
+    
+    func changeTextLabels2(duration: Double, node: SKLabelNode?){
+        let action = SKAction.fadeAlpha(to: 0, duration: 0.000000001)
+        let wait = SKAction.wait(forDuration: 3.5)
+        let action2 = SKAction.fadeAlpha(to: 1, duration: 0.000000001)
+        let wait2 = SKAction.wait(forDuration: 3.5)
+        let action3 = SKAction.fadeAlpha(to: 0, duration: 0.000000001)
+        let wait3 = SKAction.wait(forDuration: 1)
+        
+        
+        let arrayAnimations = [action, wait, action2, wait2, action3, wait3]
         node?.run(SKAction.repeatForever(SKAction.sequence(arrayAnimations)))
     }
     
@@ -164,16 +223,31 @@ public class BreathingGame: SKScene {
         addChild(star11!)
     }
     
+    func buildBackground(){
+        let texture = SKTexture(imageNamed: "Intro/imagemBackground")
+        background = SKSpriteNode(texture: texture)
+        background?.size = CGSize(width: 1200, height: 900)
+        background?.position = CGPoint(x: 0, y: 0)
+        background?.zPosition = -10
+        background?.name = "BACKGROUND"
+        addChild(background!)
+    }
+    
+    func buildTapContinue(){
+        let texture = SKTexture(imageNamed: "Intro/continueButton")
+        continueButton = SKSpriteNode(texture: texture)
+        continueButton?.size = CGSize(width: 336, height: 90)
+        continueButton?.position = CGPoint(x: 333, y: -320)
+        continueButton?.zPosition = 0
+        continueButton?.name = "CONTINUEBUTTON"
+        addChild(continueButton!)
+    }
+    
     override public func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        
-        self.scene?.removeAllChildren()
-        
         if let _ = touches.first {
-            let scene = ToDoListGame(fileNamed: "ToDoListGame/ToDoListGame")!
+            let scene = BreathingDescription(fileNamed: "BreathingGame/BreathingDescription")!
             scene.scaleMode = .aspectFit
-            //            let transition = SKTransition.fade(with: UIColor(red: 0.3725, green: 1, blue: 0.8275, alpha: 1.0),duration: 1)
-            //            let transition2 = SKTransition.push(with: .down, duration: 1)
-            let transition = SKTransition.flipHorizontal(withDuration: 1)
+            let transition = SKTransition.push(with: .left, duration: 1)
             self.view?.presentScene(scene, transition: transition)
         }
     }
