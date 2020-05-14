@@ -18,13 +18,6 @@ public class MainMenu: SKScene {
         buildBackground()
         loadSweetFont()
         loadBalsamiqFont()
-        
-//        brainRelax!.run(SKAction.repeatForever(
-//            SKAction.sequence([
-//                SKAction.moveBy(x: 0, y: -50, duration: 2),
-//                SKAction.moveBy(x: 0, y: 50, duration: 2)
-//                ]
-//        )))
     }
     
     func loadSweetFont(){

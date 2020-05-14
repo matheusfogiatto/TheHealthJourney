@@ -9,6 +9,10 @@ public class ToDoListGame: SKScene {
     private var indoorExercise: SKSpriteNode?
     private var exam: SKSpriteNode?
     private var iphoneMock: SKSpriteNode?
+    private var continueButton: SKSpriteNode?
+    private var background: SKSpriteNode?
+    private var labelCount: SKLabelNode?
+    private var instruction: SKSpriteNode?
     
     private var empty1: SKSpriteNode?
     private var empty2: SKSpriteNode?
@@ -24,23 +28,33 @@ public class ToDoListGame: SKScene {
     private var empty5Status: Bool = true
     
     private var currentNode: SKSpriteNode?
+    private var count = 0
+    private var first = true
     
     override public func didMove(to view: SKView) {
-        
+        buildBackground()
+        buildInstruction()
+    }
+    
+    func buildThings(){
         empty1 = childNode(withName: "empty1") as? SKSpriteNode
         empty2 = childNode(withName: "empty2") as? SKSpriteNode
         empty3 = childNode(withName: "empty3") as? SKSpriteNode
         empty4 = childNode(withName: "empty4") as? SKSpriteNode
         empty5 = childNode(withName: "empty5") as? SKSpriteNode
         
-//        var articles = childNode(withName: "articles") as? SKSpriteNode
-//        articles = SKSpriteNode(imageNamed: "helpGame2.png")
         buildIphoneMock()
         buildArticle()
         buildKeynotes()
         buildPlayground()
         buildIndoorExercise()
         buildExam()
+        buildCount()
+    }
+    
+    func buildCount(){
+        let label = self.childNode(withName: "countLabel") as? SKLabelNode
+        label!.text = "\(count)/5"
     }
     
     func buildIphoneMock(){
@@ -103,6 +117,35 @@ public class ToDoListGame: SKScene {
         addChild(exam!)
     }
     
+    func buildBackground(){
+        let texture = SKTexture(imageNamed: "Intro/imagemBackground")
+        background = SKSpriteNode(texture: texture)
+        background?.size = CGSize(width: 1200, height: 900)
+        background?.position = CGPoint(x: 0, y: 0)
+        background?.zPosition = -10
+        background?.name = "BACKGROUND"
+        addChild(background!)
+    }
+    
+    func buildInstruction(){
+        instruction = SKSpriteNode()
+        instruction = SKSpriteNode(imageNamed: "ToDoListGame/introduction2")
+        instruction?.size = CGSize(width: 672, height: 226)
+        instruction?.position = CGPoint(x: 0, y: 0)
+        instruction?.zPosition = 20
+        addChild(instruction!)
+    }
+    
+    func buildTapContinue(){
+        let texture = SKTexture(imageNamed: "Intro/continueButton")
+        continueButton = SKSpriteNode(texture: texture)
+        continueButton?.size = CGSize(width: 336, height: 90)
+        continueButton?.position = CGPoint(x: 333, y: -320)
+        continueButton?.zPosition = 0
+        continueButton?.name = "CONTINUEBUTTON"
+        addChild(continueButton!)
+    }
+    
     public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let touch = touches.first {
             let location = touch.location(in: self)
@@ -126,15 +169,40 @@ public class ToDoListGame: SKScene {
     
     public func matchNode(name: String){
         if name == "ARTICLE"{
+            count += 1
+            let label = self.childNode(withName: "countLabel") as? SKLabelNode
+            label!.text = "\(count)/5"
             articles?.removeFromParent()
         }else if name == "KEYNOTES"{
+            count += 1
+            let label = self.childNode(withName: "countLabel") as? SKLabelNode
+            label!.text = "\(count)/5"
             keynotes?.removeFromParent()
         }else if name == "PLAYGROUND"{
+            count += 1
+            let label = self.childNode(withName: "countLabel") as? SKLabelNode
+            label!.text = "\(count)/5"
             playground?.removeFromParent()
         }else if name == "INDOOR"{
+            count += 1
+            let label = self.childNode(withName: "countLabel") as? SKLabelNode
+            label!.text = "\(count)/5"
             indoorExercise?.removeFromParent()
         }else if name == "EXAM"{
+            count += 1
+            let label = self.childNode(withName: "countLabel") as? SKLabelNode
+            label!.text = "\(count)/5"
             exam?.removeFromParent()
+        }
+        
+        if count >= 5{
+            buildTapContinue()
+            iphoneMock!.run(SKAction.moveBy(x: -400, y: 0, duration: 1))
+            empty1!.run(SKAction.moveBy(x: -400, y: 0, duration: 1))
+            empty2!.run(SKAction.moveBy(x: -400, y: 0, duration: 1))
+            empty3!.run(SKAction.moveBy(x: -400, y: 0, duration: 1))
+            empty4!.run(SKAction.moveBy(x: -400, y: 0, duration: 1))
+            empty5!.run(SKAction.moveBy(x: -400, y: 0, duration: 1))
         }
     }
     
@@ -145,34 +213,48 @@ public class ToDoListGame: SKScene {
         }
     }
     
-     public override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if let currentNode = currentNode {
-            if currentNode.frame.intersects(empty1?.frame ?? CGRect()) && empty1Status{
-                empty1!.texture = currentNode.texture
-                empty1!.alpha = 1
-                matchNode(name: currentNode.name ?? "")
-                empty1Status = false
-            }else if currentNode.frame.intersects(empty2?.frame ?? CGRect()) && empty2Status{
-                empty2!.texture = currentNode.texture
-                empty2!.alpha = 1
-                matchNode(name: currentNode.name ?? "")
-                empty2Status = false
-            }else if currentNode.frame.intersects(empty3?.frame ?? CGRect()) && empty3Status{
-                empty3!.texture = currentNode.texture
-                empty3!.alpha = 1
-                matchNode(name: currentNode.name ?? "")
-                empty3Status = false
-            }else if currentNode.frame.intersects(empty4?.frame ?? CGRect()) && empty4Status{
-                empty4!.texture = currentNode.texture
-                empty4!.alpha = 1
-                matchNode(name: currentNode.name ?? "")
-                empty4Status = false
-            }else if currentNode.frame.intersects(empty5?.frame ?? CGRect()) && empty5Status{
-                empty5!.texture = currentNode.texture
-                empty5!.alpha = 1
-                matchNode(name: currentNode.name ?? "")
-                empty5Status = false
+     public override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?){
+        if first{
+            first = false
+            buildThings()
+            instruction!.removeFromParent()
+        }else if count >= 5 && iphoneMock!.position.x == -108.73511505126953{
+            if let _ = touches.first {
+                let scene = ToDoDescription(fileNamed: "ToDoListGame/ToDoDescription")!
+                scene.scaleMode = .aspectFit
+                let transition = SKTransition.push(with: .up, duration: 1)
+                self.view?.presentScene(scene, transition: transition)
             }
+        }else{
+            if let currentNode = currentNode {
+                if currentNode.frame.intersects(empty1?.frame ?? CGRect()) && empty1Status{
+                    empty1!.texture = currentNode.texture
+                    empty1!.alpha = 1
+                    matchNode(name: currentNode.name ?? "")
+                    empty1Status = false
+                }else if currentNode.frame.intersects(empty2?.frame ?? CGRect()) && empty2Status{
+                    empty2!.texture = currentNode.texture
+                    empty2!.alpha = 1
+                    matchNode(name: currentNode.name ?? "")
+                    empty2Status = false
+                }else if currentNode.frame.intersects(empty3?.frame ?? CGRect()) && empty3Status{
+                    empty3!.texture = currentNode.texture
+                    empty3!.alpha = 1
+                    matchNode(name: currentNode.name ?? "")
+                    empty3Status = false
+                }else if currentNode.frame.intersects(empty4?.frame ?? CGRect()) && empty4Status{
+                    empty4!.texture = currentNode.texture
+                    empty4!.alpha = 1
+                    matchNode(name: currentNode.name ?? "")
+                    empty4Status = false
+                }else if currentNode.frame.intersects(empty5?.frame ?? CGRect()) && empty5Status{
+                    empty5!.texture = currentNode.texture
+                    empty5!.alpha = 1
+                    matchNode(name: currentNode.name ?? "")
+                    empty5Status = false
+                }
+            }
+            self.currentNode = nil
         }
         self.currentNode = nil
     }

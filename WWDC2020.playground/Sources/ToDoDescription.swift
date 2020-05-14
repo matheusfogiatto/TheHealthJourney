@@ -1,32 +1,30 @@
 import AVFoundation
 import SpriteKit
 
-public class Intro2: SKScene {
+public class ToDoDescription: SKScene {
     
     private var brainHappy: SKSpriteNode?
-    private var background: SKSpriteNode?
     private var continueButton: SKSpriteNode?
+    private var background: SKSpriteNode?
     
     override public func didMove(to view: SKView) {
-        
-        buildBrainHappy()
-        buildBackground()
-        buildTapContinue()
         
         let label = self.childNode(withName: "textLabel") as? SKLabelNode
         label!.text =
         """
-        Mental health includes our emotional, psychological, and social well-being. It affects how we think, feel, and act. It also helps determine how we handle stress, relate to others, and make choices. Next, I prepared some exercises that can contribute to a better mental health. Let’s try?
+        Do you have too much traffic in your mind? So many things going around in the brain that you feel like you are just living in a whirlpool of things to do, ideas to chase, and ‘must do’ moments. Perhaps having a task list will start to solidify what needs to be done.
         """
-        // Mental health is important at every stage of life, from childhood and adolescence through adulthood.
         label!.lineBreakMode = NSLineBreakMode.byWordWrapping
         label!.numberOfLines = 0
         label!.preferredMaxLayoutWidth = 450
-       
+        
+        buildBrainHappy()
+        buildTapContinue()
+        buildBackground()
     }
     
     func buildBrainHappy(){
-        let texture = SKTexture(imageNamed: "Intro/brainThinking")
+        let texture = SKTexture(imageNamed: "Intro/brainHappy")
         brainHappy = SKSpriteNode(texture: texture)
         brainHappy?.size = CGSize(width: 516, height: 487)
         brainHappy?.position = CGPoint(x: -258.708, y: -30.75)
@@ -57,9 +55,8 @@ public class Intro2: SKScene {
     
     
     override public func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        
         if let _ = touches.first {
-            let scene = BreathingGame(fileNamed: "BreathingGame/BreathingGame")!
+            let scene = EndDescription(fileNamed: "Congratulations/EndDescription")!
             scene.scaleMode = .aspectFit
             let transition = SKTransition.push(with: .left, duration: 1)
             self.view?.presentScene(scene, transition: transition)
